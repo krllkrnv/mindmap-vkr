@@ -2,7 +2,6 @@
   <div class="app">
     <header class="app-header">
       <h1>Глоссарий терминов ВКР</h1>
-      <p>Система управления терминами выпускной квалификационной работы</p>
     </header>
 
     <nav class="main-nav">
