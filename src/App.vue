@@ -13,7 +13,7 @@
         Добавить термин
       </router-link>
       <router-link to="/graph" class="nav-link">
-        График связей
+        Граф связей
       </router-link>
     </nav>
 

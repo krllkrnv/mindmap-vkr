@@ -7,7 +7,7 @@
           Добавить термин
         </button>
         <button @click="$router.push('/graph')" class="btn btn-secondary">
-          График связей
+          Граф связей
         </button>
       </div>
     </div>

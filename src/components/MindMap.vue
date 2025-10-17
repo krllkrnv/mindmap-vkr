@@ -1,7 +1,7 @@
 <template>
   <div class="mindmap-container" ref="containerEl">
     <div class="header">
-      <h1>График связей терминов</h1>
+      <h1>Граф связей терминов</h1>
       <button @click="$router.push('/terms')" class="btn btn-secondary">
         Назад к списку
       </button>
