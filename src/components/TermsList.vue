@@ -21,33 +21,30 @@
     </div>
 
     <div v-else class="terms-grid">
-      <div 
+      <TermCard 
         v-for="term in terms" 
         :key="term.id" 
-        class="term-card"
-        @click="$router.push(`/terms/${term.id}/edit`)"
-      >
-        <h3>{{ term.term }}</h3>
-        <p class="category">{{ term.category }}</p>
-        <p class="definition">{{ term.definition }}</p>
-        <div v-if="term.related_terms && term.related_terms.length" class="related">
-          <strong>Связанные термины:</strong>
-          <span v-for="(related, index) in term.related_terms" :key="index">
-            {{ related }}{{ index < term.related_terms.length - 1 ? ', ' : '' }}
-          </span>
-        </div>
-      </div>
+        :term="term"
+        @edit="handleEdit"
+        @delete="handleDelete"
+      />
     </div>
   </div>
 </template>
 
 <script>
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import api from '../services/api.js'
+import TermCard from './TermCard.vue'
 
 export default {
   name: 'TermsList',
+  components: {
+    TermCard
+  },
   setup() {
+    const router = useRouter()
     const terms = ref([])
     const loading = ref(true)
     const error = ref(null)
@@ -66,6 +63,25 @@ export default {
       }
     }
 
+    const handleEdit = (term) => {
+      router.push(`/terms/${term.id}/edit`)
+    }
+
+    const handleDelete = async (termId) => {
+      if (confirm('Вы уверены, что хотите удалить этот термин?')) {
+        try {
+          await api.deleteTerm(termId)
+          // Удаляем термин из локального списка
+          terms.value = terms.value.filter(term => term.id !== termId)
+          alert('Термин успешно удален')
+        } catch (err) {
+          error.value = err.message
+          console.error('Ошибка удаления термина:', err)
+          alert('Ошибка при удалении термина: ' + err.message)
+        }
+      }
+    }
+
     onMounted(() => {
       loadTerms()
     })
@@ -73,7 +89,9 @@ export default {
     return {
       terms,
       loading,
-      error
+      error,
+      handleEdit,
+      handleDelete
     }
   }
 }
@@ -148,49 +166,5 @@ export default {
   gap: 20px;
 }
 
-.term-card {
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 20px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.term-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-  border-color: #3498db;
-}
-
-.term-card h3 {
-  margin: 0 0 10px 0;
-  color: #2c3e50;
-  font-size: 18px;
-}
-
-.category {
-  margin: 0 0 10px 0;
-  color: #7f8c8d;
-  font-size: 12px;
-  text-transform: uppercase;
-  font-weight: bold;
-}
-
-.definition {
-  margin: 0 0 15px 0;
-  color: #34495e;
-  line-height: 1.5;
-}
-
-.related {
-  font-size: 12px;
-  color: #7f8c8d;
-  line-height: 1.4;
-}
-
-.related strong {
-  color: #2c3e50;
-}
+/* Стили для TermCard теперь в самом компоненте TermCard.vue */
 </style>

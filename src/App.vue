@@ -29,7 +29,6 @@
 
 <style scoped>
 .app {
-  max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
